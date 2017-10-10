@@ -21,6 +21,7 @@ import android.os.Handler;
 
 import com.baidu.duer.dcs.systeminterface.IWakeUp;
 import com.baidu.duer.dcs.util.LogUtil;
+import com.orhanobut.logger.Logger;
 
 import java.io.File;
 import java.util.Collections;
@@ -38,7 +39,7 @@ public class WakeUpImpl implements IWakeUp {
     // 初始化唤醒词成功
     private static final int WAKEUP_INIT_SUCCEED = 0;
     // 唤醒词
-    private static final String WAKEUP_WORD = "小度小度";
+    private static final String WAKEUP_WORD = "小睿小睿";
     // 唤醒词声学模型模型文件
     private static final String WAKEUP_FILENAME = "libbdEasrS1MergeNormal.so";
     // jni
@@ -72,20 +73,20 @@ public class WakeUpImpl implements IWakeUp {
         LogUtil.d(TAG, "wakeup exists:" + new File(path).exists());
         // 1.初始化唤醒词，0 是初始化成功
         wakeUpInitialRet = wakeUpNative.wakeUpInitial(WAKEUP_WORD, path, 0);
-        LogUtil.d(TAG, "wakeUpInitialRet:" + wakeUpInitialRet);
+        Logger.d("wakeUpInitialRet:" + wakeUpInitialRet);
     }
 
     @Override
     public void startWakeUp() {
         if (wakeUpDecodeThread != null && wakeUpDecodeThread.isStart()) {
-            LogUtil.d(TAG, "wakeup wakeUpDecodeThread  is Started !");
+            Logger.d("wakeup wakeUpDecodeThread  is Started !");
             return;
         }
         // 2.开始唤醒
         if (wakeUpInitialRet == WAKEUP_INIT_SUCCEED) {
             wakeUp();
         } else {
-            LogUtil.d(TAG, "wakeup wakeUpInitialRet failed, not startWakeUp ");
+            Logger.d("wakeup wakeUpInitialRet failed, not startWakeUp ");
         }
     }
 
@@ -101,7 +102,7 @@ public class WakeUpImpl implements IWakeUp {
     public void releaseWakeUp() {
         // 3.释放资源
         int ret = wakeUpNative.wakeUpFree();
-        LogUtil.d(TAG, "wakeUpFree-ret:" + ret);
+        Logger.d("wakeUpFree-ret:" + ret);
     }
 
     @Override
@@ -117,6 +118,7 @@ public class WakeUpImpl implements IWakeUp {
         wakeUpDecodeThread.setWakeUpListener(new WakeUpDecodeThread.IWakeUpListener() {
             @Override
             public void onWakeUpSucceed() {
+                Logger.d("onWakeUpSucceed()");
                 // 唤醒成功
                 fireOnWakeUpSucceed();
             }

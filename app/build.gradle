@@ -70,4 +70,8 @@ dependencies {
     // compile 'com.squareup.okio:okio:1.13.0'
     compile 'javazoom:jlayer:1.0.1'
     compile files('libs/okio-1.14.0.jar')
+    // Logger
+    compile 'com.orhanobut:logger:2.1.1'
+    // Gson
+    compile 'com.google.code.gson:gson:2.7'
 }

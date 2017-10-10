@@ -32,6 +32,8 @@ import com.baidu.duer.dcs.http.HttpRequestInterface;
 import com.baidu.duer.dcs.http.OkHttpRequestImpl;
 import com.baidu.duer.dcs.http.callback.ResponseCallback;
 import com.baidu.duer.dcs.util.LogUtil;
+import com.google.gson.Gson;
+import com.orhanobut.logger.Logger;
 
 
 /**
@@ -118,6 +120,7 @@ public class DcsClient {
      */
     public void sendRequest(DcsRequestBody requestBody,
                             DcsStreamRequestBody streamRequestBody, final IResponseListener listener) {
+        Logger.d("Event >> " + new Gson().toJson(requestBody, DcsRequestBody.class));
         Log.e("logId", "logId send  stream start");
         decoder.interruptDecode();
         // httpRequestImp.cancelRequest(HttpConfig.HTTP_VOICE_TAG);
@@ -148,6 +151,7 @@ public class DcsClient {
      * @param listener    回调
      */
     public void sendRequest(DcsRequestBody requestBody, IResponseListener listener) {
+        Logger.d("Event >> " + new Gson().toJson(requestBody, DcsRequestBody.class));
         httpRequestImp.doPostEventStringAsync(requestBody,
                 getResponseCallback(eventParser, listener));
     }

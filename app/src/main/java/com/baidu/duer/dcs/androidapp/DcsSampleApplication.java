@@ -17,6 +17,11 @@ package com.baidu.duer.dcs.androidapp;
 
 import android.app.Application;
 
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.FormatStrategy;
+import com.orhanobut.logger.Logger;
+import com.orhanobut.logger.PrettyFormatStrategy;
+
 /**
  * DcsSample application
  * <p>
@@ -29,6 +34,25 @@ public class DcsSampleApplication extends Application {
         super.onCreate();
         instance = this;
         // LeakCanary.install(this);
+        initLogger();
+    }
+
+    /**
+     * 初始化日志工具
+     */
+    private void initLogger() {
+        FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
+                .showThreadInfo(false)  // Whether to show thread info or not. Default true
+                .methodCount(1)         // How many method line to show. Default 2
+                .methodOffset(2)        // Hides internal method calls up to offset. Default 5
+                .tag("DcsSampleApplication")   // Global tag for every log. Default PRETTY_LOGGER
+                .build();
+        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy) {
+            @Override
+            public boolean isLoggable(int priority, String tag) {
+                return true;
+            }
+        });
     }
 
     public static DcsSampleApplication getInstance() {

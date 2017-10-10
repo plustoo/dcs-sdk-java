@@ -47,6 +47,7 @@ import com.baidu.duer.dcs.util.FileUtil;
 import com.baidu.duer.dcs.util.LogUtil;
 import com.baidu.duer.dcs.util.NetWorkUtil;
 import com.baidu.duer.dcs.wakeup.WakeUp;
+import com.orhanobut.logger.Logger;
 
 import java.io.File;
 
@@ -103,7 +104,7 @@ public class DcsSampleMainActivity extends DcsSampleBaseActivity implements View
             @Override
             public BaseWebView.LoadingWebStatus shouldOverrideUrlLoading(WebView view, String url) {
                 // 拦截处理不让其点击
-                return BaseWebView.LoadingWebStatus.STATUS_TRUE;
+                return BaseWebView.LoadingWebStatus.STATUS_FALSE;
             }
 
             @Override
@@ -147,20 +148,20 @@ public class DcsSampleMainActivity extends DcsSampleBaseActivity implements View
                 new VoiceInputDeviceModule.IVoiceInputListener() {
                     @Override
                     public void onStartRecord() {
-                        LogUtil.d(TAG, "onStartRecord");
+                        Logger.d("onStartRecord");
                         startRecording();
                     }
 
                     @Override
                     public void onFinishRecord() {
-                        LogUtil.d(TAG, "onFinishRecord");
+                        Logger.d("onFinishRecord");
                         stopRecording();
                     }
 
                     public void onSucceed(int statusCode) {
-                        LogUtil.d(TAG, "onSucceed-statusCode:" + statusCode);
+                        Logger.d("onSucceed-statusCode:" + statusCode);
+                        stopRecording();
                         if (statusCode != 200) {
-                            stopRecording();
                             Toast.makeText(DcsSampleMainActivity.this,
                                     getResources().getString(R.string.voice_err_msg),
                                     Toast.LENGTH_SHORT)
@@ -170,7 +171,7 @@ public class DcsSampleMainActivity extends DcsSampleBaseActivity implements View
 
                     @Override
                     public void onFailed(String errorMessage) {
-                        LogUtil.d(TAG, "onFailed-errorMessage:" + errorMessage);
+                        Logger.d("onFailed-errorMessage:" + errorMessage);
                         stopRecording();
                         Toast.makeText(DcsSampleMainActivity.this,
                                 getResources().getString(R.string.voice_err_msg),
